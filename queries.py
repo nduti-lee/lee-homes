@@ -23,4 +23,22 @@ def get_coordinates(city):
         headers = {"Referer": "https://www.lee-homes/",
                 "Origin": "https://www.lee-homes/",
                 "Host": "api.lee-homes"}
-
+        form = {
+                "latitudemin": lat_min,
+                "latitudemax": lat_max,
+                "longitudemin": long_min,
+                "longitudemax": long_max,
+                "pricemin": price_min,
+                "pricemax": price_max,
+                "recordsperpage": records_per_page,
+                "cultureid": culture_id,
+                "currentpage": current_page,
+                "applicationid": application_id,
+                }
+        response = request.post(url=url, headers=headers,data=form, timeout=10)
+        if response.status_code == 403:
+            print("Error 403: Rate limited")
+        elif response.status_code != 200:
+            print("Error" + str(response.status_code))
+            response.raise_for_status()
+            return response.json()
